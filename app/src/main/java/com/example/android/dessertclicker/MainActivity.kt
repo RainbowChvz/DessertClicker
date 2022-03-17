@@ -71,6 +71,12 @@ class MainActivity : AppCompatActivity() {
         // Use Data Binding to get reference to the views
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        if (savedInstanceState != null) {
+            revenue = savedInstanceState.getInt(KEY_REVENUE, revenue)
+            dessertsSold = savedInstanceState.getInt(KEY_DESSERTS_SOLD, dessertsSold)
+            showCurrentDessert()
+        }
+
         binding.dessertButton.setOnClickListener {
             onDessertClicked()
         }
@@ -106,6 +112,14 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "onStop called")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(KEY_REVENUE, revenue)
+        outState.putInt(KEY_DESSERTS_SOLD, dessertsSold)
+        
+        super.onSaveInstanceState(outState)
+        Log.d(TAG, "onSaveInstanceState called")
     }
 
     override fun onDestroy() {
@@ -178,5 +192,10 @@ class MainActivity : AppCompatActivity() {
             R.id.shareMenuButton -> onShare()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        const val KEY_REVENUE = "revenue"
+        const val KEY_DESSERTS_SOLD = "desserts_sold"
     }
 }
